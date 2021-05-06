@@ -1,6 +1,6 @@
 # rsb
 
-Simple C/C++ header libraries for pleasant console application development with Visual Studio 2019 (or older...).
+A non-cross-platform header library written in C, for Windows development. 
 
 | library    | category | loc | version | description |
 | ---------- | -------- | --- | ------- | ----------- |
@@ -11,8 +11,3 @@ Simple C/C++ header libraries for pleasant console application development with 
 > Allows simple printf like logging on the Visual Studio Output window
 
 - Usage is currently documented in the header library
-
-
-
-
-
