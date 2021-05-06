@@ -68,6 +68,8 @@
  *        #include <rsb/log.h>
  *
  *        void main() { printf("The best number is %d", 42); }
+ *
+ *        // printf now outputs to the Visual Studio Output window
  */
 
 #ifndef __RSB_LOG_H__
