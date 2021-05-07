@@ -1,13 +1,53 @@
-# rsb
+# rsb/log.h
 
-A non-cross-platform header library written in C, for Windows development. 
+A header library that allows simple printf like logging to the Visual Studio Output window
 
-| library    | category | loc | version | description |
-| ---------- | -------- | --- | ------- | ----------- |
-| [log.h](https://github.com/rbento/rsb/blob/main/include/rsb/log.h) | diagnostics | 21 | 1.0 | Allows simple printf like logging on the Visual Studio Output window |
+#### Usage
 
-### rsb/log.h
+##### Default approach
 
-> Allows simple printf like logging on the Visual Studio Output window
+```     
+#include <rsb/log.h>  
 
-- Usage is currently documented in the header library
+int main() 
+{ 
+    info("The best number is %d", 42); 
+}
+```
+
+##### Setting the output string length
+
+```    
+#define RSB_LOG_STR_LENGTH 80
+
+#include <rsb/log.h>
+
+int main() 
+{ 
+    info("The best number is %d", 42); 
+}
+```
+
+#### Disabling the external Command Prompt Console Window in Visual Studio while keeping the C main function
+ 
+For a C/C++ project on Visual Studio, set the following Project Properties:
+
+##### Linker > System > SubSystem
+ 
+```/SUBSYSTEM:WINDOWS```
+  
+##### Linker > Command Line > Additional Options
+ 
+```/ENTRY:mainCRTStartup```
+
+##### Or alternatively add the preprocessor comment
+ 
+```#pragma comment(linker, "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")```
+ 
+See: [https://docs.microsoft.com/en-us/cpp/build/reference/entry-entry-point-symbol][1]
+
+#### Note
+
+- If using with `glew.h` or `glfw3.h`, include `<rsb/log.h>` first to avoid APIENTRY macro redefinition.
+ 
+ [1]: https://docs.microsoft.com/en-us/cpp/build/reference/entry-entry-point-symbol
