@@ -4,31 +4,24 @@ A header library that allows simple printf like logging to the Visual Studio Out
 
 #### Usage
 
-##### Default approach
+##### Simply include log.h
 
 ```     
 #include <rsb/log.h>  
 
 int main() 
 { 
-    info("The best number is %d", 42); 
+    info("GameObject.Id %d", 42); 
 }
 ```
 
-##### Setting the output string length
+##### Adjust the output string length
 
 ```    
-#define RSB_LOG_STR_LENGTH 80
-
-#include <rsb/log.h>
-
-int main() 
-{ 
-    info("The best number is %d", 42); 
-}
+#define RSB_LOG_STR_LENGTH 2048
 ```
 
-#### Disabling the external Command Prompt Console Window in Visual Studio while keeping the C main function
+#### Disable the external Command Prompt Console Window in Visual Studio while keeping the C/C++ main function
  
 For a C/C++ project on Visual Studio, set the following Project Properties:
 
