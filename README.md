@@ -1,13 +1,16 @@
-# rsb/log.h
+# log.h
 
-A header library that allows simple printf like logging to the Visual Studio Output window
+A C/C++ drop in header library that allows logging to the Visual Studio Output window
 
-#### Usage
 
-##### Simply include log.h
+### Usage
 
 ```     
-#include <rsb/log.h>  
+// Alternatively adjust the output string lenght 
+
+#define RSB_LOG_STR_LENGTH 2048
+
+#include "log.h"
 
 int main() 
 { 
@@ -15,13 +18,7 @@ int main()
 }
 ```
 
-##### Adjust the output string length
-
-```    
-#define RSB_LOG_STR_LENGTH 2048
-```
-
-#### Disable the external Command Prompt Console Window in Visual Studio while keeping the C/C++ main function
+### Disable the external Command Prompt Console Window in Visual Studio 
  
 For a C/C++ project on Visual Studio, set the following Project Properties:
 
@@ -39,8 +36,8 @@ For a C/C++ project on Visual Studio, set the following Project Properties:
  
 See: [https://docs.microsoft.com/en-us/cpp/build/reference/entry-entry-point-symbol][1]
 
-#### Note
+### Note
 
-- If using with `glew.h` or `glfw3.h`, include `<rsb/log.h>` first to avoid APIENTRY macro redefinition.
+- If using with `glew.h` or `glfw3.h`, include `log.h` first to avoid APIENTRY macro redefinition.
  
  [1]: https://docs.microsoft.com/en-us/cpp/build/reference/entry-entry-point-symbol
