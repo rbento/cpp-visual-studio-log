@@ -1,20 +1,22 @@
-# log.h
+# Log.h
 
-A C/C++ drop in header library that allows logging to the Visual Studio Output window
+A C/C++ drop in header library that enables logging to the Visual Studio Output window
 
+Meant for small projects
 
 ### Usage
 
 ```     
-// Alternatively adjust the output string lenght 
+// Alternatively adjust the output and format string length 
 
-#define RSB_LOG_STR_LENGTH 2048
+#define LOG_OUTPUT_FORMAT_LENGTH 512
+#define LOG_OUTPUT_STRING_LENGTH 1024
 
-#include "log.h"
+#include "Log.h"
 
 int main() 
 { 
-    info("GameObject.Id %d", 42); 
+    Info("GameObject.Id %d", 42); 
 }
 ```
 
@@ -38,6 +40,6 @@ See: [https://docs.microsoft.com/en-us/cpp/build/reference/entry-entry-point-sym
 
 ### Note
 
-- If using with `glew.h` or `glfw3.h`, include `log.h` first to avoid APIENTRY macro redefinition.
+- If using with `glew.h` or `glfw3.h`, include `Log.h` first to avoid APIENTRY macro redefinition.
  
  [1]: https://docs.microsoft.com/en-us/cpp/build/reference/entry-entry-point-symbol
