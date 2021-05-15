@@ -1,8 +1,8 @@
 # Log.h
 
-A C/C++ drop in header library that enables logging to the Visual Studio Output window
+A convenience C/C++ drop in header library that enables logging to the Visual Studio Output window
 
-Meant for small projects
+Meant for small projects only
 
 ### Usage
 
