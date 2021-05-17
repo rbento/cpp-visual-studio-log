@@ -54,11 +54,12 @@ SOFTWARE.
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#define Trace(Format, ...) Log("TRACE", Format, __VA_ARGS__)
-#define Debug(Format, ...) Log("DEBUG", Format, __VA_ARGS__)
-#define  Info(Format, ...) Log(" INFO", Format, __VA_ARGS__)
-#define  Warn(Format, ...) Log(" WARN", Format, __VA_ARGS__)
-#define Error(Format, ...) Log("ERROR", Format, __VA_ARGS__)
+#define Message(Format, ...) Log(">>>", Format, __VA_ARGS__)
+#define Trace(Format, ...) Log("TRC", Format, __VA_ARGS__)
+#define Debug(Format, ...) Log("DBG", Format, __VA_ARGS__)
+#define  Info(Format, ...) Log("INF", Format, __VA_ARGS__)
+#define  Warn(Format, ...) Log("WRN", Format, __VA_ARGS__)
+#define Error(Format, ...) Log("ERR", Format, __VA_ARGS__)
 
 ///////////////////////////////////////////////////////////////////////////////
 
