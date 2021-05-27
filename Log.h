@@ -24,65 +24,94 @@ SOFTWARE.
 
 #pragma once
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 #if !defined(_WIN32)
 #error This library targets Microsoft Windows only
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(_WINDOWS_)
-#include <windows.h>
-#endif
+#if !defined(LOG_OUTPUT_ENABLED)
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
+#define NOOP ((void)0)
 
-///////////////////////////////////////////////////////////////////////////////
+#define   Message(Format, ...) NOOP
+#define     Trace(Format, ...) NOOP
+#define     Debug(Format, ...) NOOP
+#define      Info(Format, ...) NOOP
+#define      Warn(Format, ...) NOOP 
+#define     Error(Format, ...) NOOP
+#define     Fatal(Format, ...) NOOP
+#define LineBreak() NOOP
+
+////////////////////////////////////////////////////////////////////////////////
+
+#else
+
+////////////////////////////////////////////////////////////////////////////////
 
 #if !defined(LOG_OUTPUT_FORMAT_LENGTH)
 #define LOG_OUTPUT_FORMAT_LENGTH 256
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 #if !defined(LOG_OUTPUT_STRING_LENGTH)
 #define LOG_OUTPUT_STRING_LENGTH 1024
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+#if !defined(_WINDOWS_)
+#undef APIENTRY
+#include <windows.h>
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+
+#include <cstdio>
+
+////////////////////////////////////////////////////////////////////////////////
 
 #define Message(Format, ...) Log(">>>", Format, __VA_ARGS__)
-#define Trace(Format, ...) Log("TRC", Format, __VA_ARGS__)
-#define Debug(Format, ...) Log("DBG", Format, __VA_ARGS__)
-#define  Info(Format, ...) Log("INF", Format, __VA_ARGS__)
-#define  Warn(Format, ...) Log("WRN", Format, __VA_ARGS__)
-#define Error(Format, ...) Log("ERR", Format, __VA_ARGS__)
+#define   Trace(Format, ...) Log("TRC", Format, __VA_ARGS__)
+#define   Debug(Format, ...) Log("DBG", Format, __VA_ARGS__)
+#define    Info(Format, ...) Log("INF", Format, __VA_ARGS__)
+#define    Warn(Format, ...) Log("WRN", Format, __VA_ARGS__)
+#define   Error(Format, ...) Log("ERR", Format, __VA_ARGS__)
+#define   Fatal(Format, ...) Log("FTL", Format, __VA_ARGS__)
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-/** Outputs a formatted message to the Visual Studio output window
- *
- * @param Marker A string that marks the message intent
- * @param Format The string format specifier
- * @param ... The variadic argument list
- */
+/** Outputs a formatted message to the Visual Studio output window */
 static void __stdcall Log(const char* Marker, const char* Format, ...)
 {
-    va_list Args;
-    va_start(Args, Format);
+	va_list Args;
+	va_start(Args, Format);
 
-    char OutputFormat[LOG_OUTPUT_FORMAT_LENGTH];
-    sprintf_s(OutputFormat, "%s %s\n", Marker, Format);
+	char OutputFormat[LOG_OUTPUT_FORMAT_LENGTH];
+	sprintf_s(OutputFormat, "%s %s\n", Marker, Format);
 
-    char OutputString[LOG_OUTPUT_STRING_LENGTH];
-    vsnprintf(OutputString, sizeof(OutputString), OutputFormat, Args);
+	char OutputString[LOG_OUTPUT_STRING_LENGTH];
+	vsnprintf(OutputString, sizeof(OutputString), OutputFormat, Args);
 
-    va_end(Args);
+	va_end(Args);
 
-    OutputDebugStringA(OutputString);
+	OutputDebugStringA(OutputString);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+static void __stdcall LineBreak()
+{
+	Log("", "");
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
