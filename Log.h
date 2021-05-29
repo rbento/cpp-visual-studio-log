@@ -38,13 +38,13 @@ SOFTWARE.
 
 #define NOOP ((void)0)
 
-#define Message(Format, ...) NOOP
-#define Trace  (Format, ...) NOOP
-#define Debug  (Format, ...) NOOP
-#define Info   (Format, ...) NOOP
-#define Warn   (Format, ...) NOOP 
-#define Error  (Format, ...) NOOP
-#define Fatal  (Format, ...) NOOP
+#define   Message(Format, ...) NOOP
+#define     Trace(Format, ...) NOOP
+#define     Debug(Format, ...) NOOP
+#define      Info(Format, ...) NOOP
+#define      Warn(Format, ...) NOOP 
+#define     Error(Format, ...) NOOP
+#define     Fatal(Format, ...) NOOP
 #define LineBreak() NOOP
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,38 +76,66 @@ SOFTWARE.
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define Message(Format, ...) Log(">>>", Format, __VA_ARGS__)
-#define Trace  (Format, ...) Log("TRC", Format, __VA_ARGS__)
-#define Debug  (Format, ...) Log("DBG", Format, __VA_ARGS__)
-#define Info   (Format, ...) Log("INF", Format, __VA_ARGS__)
-#define Warn   (Format, ...) Log("WRN", Format, __VA_ARGS__)
-#define Error  (Format, ...) Log("ERR", Format, __VA_ARGS__)
-#define Fatal  (Format, ...) Log("FTL", Format, __VA_ARGS__)
+#define printf LogF /** printf outputs to Visual Studio Output window */
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/** Outputs a formatted message to the Visual Studio output window */
-static void __stdcall Log(const char* Marker, const char* Format, ...)
+#define Message(Format, ...) LogM(">>>", Format, __VA_ARGS__)
+#define   Trace(Format, ...) LogM("TRC", Format, __VA_ARGS__)
+#define   Debug(Format, ...) LogM("DBG", Format, __VA_ARGS__)
+#define    Info(Format, ...) LogM("INF", Format, __VA_ARGS__)
+#define    Warn(Format, ...) LogM("WRN", Format, __VA_ARGS__)
+#define   Error(Format, ...) LogM("ERR", Format, __VA_ARGS__)
+#define   Fatal(Format, ...) LogM("FTL", Format, __VA_ARGS__)
+
+////////////////////////////////////////////////////////////////////////////////
+
+static int __stdcall LogVA(const char* Format, va_list Args)
 {
-    va_list Args;
-    va_start(Args, Format);
+	char CharBuffer[LOG_OUTPUT_STRING_LENGTH];
+	int NumCharsWritten = vsnprintf(CharBuffer, sizeof(CharBuffer), Format, Args);
 
-    char OutputFormat[LOG_OUTPUT_FORMAT_LENGTH];
-    sprintf_s(OutputFormat, "%s %s\n", Marker, Format);
+	OutputDebugStringA(CharBuffer);
 
-    char OutputString[LOG_OUTPUT_STRING_LENGTH];
-    vsnprintf(OutputString, sizeof(OutputString), OutputFormat, Args);
+	return NumCharsWritten;
+}
 
-    va_end(Args);
+////////////////////////////////////////////////////////////////////////////////
 
-    OutputDebugStringA(OutputString);
+static int __stdcall LogF(const char* Format, ...)
+{
+	va_list Args;
+	va_start(Args, Format);
+
+	int NumCharsWritten = LogVA(Format, Args);
+
+	va_end(Args);
+
+	return NumCharsWritten;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+static int __stdcall LogM(const char* Marker, const char* Format, ...)
+{
+	char MarkedFormat[LOG_OUTPUT_FORMAT_LENGTH];
+	sprintf_s(MarkedFormat, "%s %s\n", Marker, Format);
+
+	va_list Args;
+	va_start(Args, Format);
+
+	int NumCharsWritten = LogVA(MarkedFormat, Args);
+
+	va_end(Args);
+
+	return NumCharsWritten;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static void __stdcall LineBreak()
 {
-    Log("", "");
+	LogF("\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
