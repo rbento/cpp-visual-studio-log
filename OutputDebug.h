@@ -32,20 +32,18 @@ SOFTWARE.
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(LOG_OUTPUT_ENABLED)
+#if !defined(_OUTPUT_DEBUG_ENABLED)
 
 ////////////////////////////////////////////////////////////////////////////////
 
 #define NOOP ((void)0)
 
-#define   Message(Format, ...) NOOP
-#define     Trace(Format, ...) NOOP
-#define     Debug(Format, ...) NOOP
-#define      Info(Format, ...) NOOP
-#define      Warn(Format, ...) NOOP 
-#define     Error(Format, ...) NOOP
-#define     Fatal(Format, ...) NOOP
-#define LineBreak() NOOP
+#define Trace(Format, ...) NOOP
+#define Debug(Format, ...) NOOP
+#define  Info(Format, ...) NOOP
+#define  Warn(Format, ...) NOOP 
+#define Error(Format, ...) NOOP
+#define Fatal(Format, ...) NOOP
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,14 +51,14 @@ SOFTWARE.
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(LOG_OUTPUT_FORMAT_LENGTH)
-#define LOG_OUTPUT_FORMAT_LENGTH 256
+#if !defined(_OUTPUT_DEBUG_FORMAT_LENGTH)
+#define _OUTPUT_DEBUG_FORMAT_LENGTH 384
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(LOG_OUTPUT_STRING_LENGTH)
-#define LOG_OUTPUT_STRING_LENGTH 1024
+#if !defined(_OUTPUT_DEBUG_STRING_LENGTH)
+#define _OUTPUT_DEBUG_STRING_LENGTH 1024
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,26 +71,38 @@ SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cstdio>
+#include <map>
+#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define printf LogF /** printf outputs to Visual Studio Output window */
+#define printf OutputDebugF /** printf outputs to Visual Studio Output window */
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define Message(Format, ...) LogM(">>>", Format, __VA_ARGS__)
-#define   Trace(Format, ...) LogM("TRC", Format, __VA_ARGS__)
-#define   Debug(Format, ...) LogM("DBG", Format, __VA_ARGS__)
-#define    Info(Format, ...) LogM("INF", Format, __VA_ARGS__)
-#define    Warn(Format, ...) LogM("WRN", Format, __VA_ARGS__)
-#define   Error(Format, ...) LogM("ERR", Format, __VA_ARGS__)
-#define   Fatal(Format, ...) LogM("FTL", Format, __VA_ARGS__)
-
-////////////////////////////////////////////////////////////////////////////////
-
-static int __stdcall LogVA(const char* Format, va_list Args)
+enum class OutputDebugLevel 
 {
-	char CharBuffer[LOG_OUTPUT_STRING_LENGTH];
+	Message, Trace, Debug, Info, Warn, Error, Fatal
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+static const OutputDebugLevel _OUTPUT_DEBUG_LEVEL = OutputDebugLevel::Trace;
+
+////////////////////////////////////////////////////////////////////////////////
+
+#define Trace(Format, ...) OutputDebug(OutputDebugLevel::Trace, Format, __VA_ARGS__)
+#define Debug(Format, ...) OutputDebug(OutputDebugLevel::Debug, Format, __VA_ARGS__)
+#define  Info(Format, ...) OutputDebug(OutputDebugLevel::Info,  Format, __VA_ARGS__)
+#define  Warn(Format, ...) OutputDebug(OutputDebugLevel::Warn,  Format, __VA_ARGS__)
+#define Error(Format, ...) OutputDebug(OutputDebugLevel::Error, Format, __VA_ARGS__)
+#define Fatal(Format, ...) OutputDebug(OutputDebugLevel::Fatal, Format, __VA_ARGS__)
+
+////////////////////////////////////////////////////////////////////////////////
+
+static int __stdcall OutputDebugVA(const char* Format, va_list Args)
+{
+	char CharBuffer[_OUTPUT_DEBUG_STRING_LENGTH];
 	int NumCharsWritten = vsnprintf(CharBuffer, sizeof(CharBuffer), Format, Args);
 
 	OutputDebugStringA(CharBuffer);
@@ -102,12 +112,12 @@ static int __stdcall LogVA(const char* Format, va_list Args)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static int __stdcall LogF(const char* Format, ...)
+static int __stdcall OutputDebugF(const char* Format, ...)
 {
 	va_list Args;
 	va_start(Args, Format);
 
-	int NumCharsWritten = LogVA(Format, Args);
+	int NumCharsWritten = OutputDebugVA(Format, Args);
 
 	va_end(Args);
 
@@ -116,26 +126,34 @@ static int __stdcall LogF(const char* Format, ...)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static int __stdcall LogM(const char* Marker, const char* Format, ...)
+static int __stdcall OutputDebug(OutputDebugLevel Level, const char* Format, ...)
 {
-	char MarkedFormat[LOG_OUTPUT_FORMAT_LENGTH];
-	sprintf_s(MarkedFormat, "%s %s\n", Marker, Format);
+	static std::map<OutputDebugLevel, const char*> Markers
+	{
+		{ OutputDebugLevel::Trace, "TRC" },
+		{ OutputDebugLevel::Debug, "DBG" },
+		{ OutputDebugLevel::Info, "INF" },
+		{ OutputDebugLevel::Warn, "WRN" },
+		{ OutputDebugLevel::Error, "ERR" },
+		{ OutputDebugLevel::Fatal, "FTL" }
+	};
+
+	if (Level < _OUTPUT_DEBUG_LEVEL)
+	{
+		return 0;
+	}
+
+	char MarkedFormat[_OUTPUT_DEBUG_FORMAT_LENGTH];
+	sprintf_s(MarkedFormat, "%s %s\n", Markers[Level], Format);
 
 	va_list Args;
 	va_start(Args, Format);
 
-	int NumCharsWritten = LogVA(MarkedFormat, Args);
+	int NumCharsWritten = OutputDebugVA(MarkedFormat, Args);
 
 	va_end(Args);
 
 	return NumCharsWritten;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-static void __stdcall LineBreak()
-{
-	LogF("\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
