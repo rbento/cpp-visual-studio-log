@@ -32,7 +32,7 @@ SOFTWARE.
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(_OUTPUT_DEBUG_ENABLED)
+#if !defined(_DEBUG)
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +71,7 @@ SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cstdio>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ static int __stdcall OutputDebugF(const char* Format, ...)
 
 static int __stdcall OutputDebug(OutputDebugLevel Level, const char* Format, ...)
 {
-	static std::map<OutputDebugLevel, const char*> Markers
+	static std::unordered_map<OutputDebugLevel, const char*> Markers
 	{
 		{ OutputDebugLevel::Trace, "TRC" },
 		{ OutputDebugLevel::Debug, "DBG" },
