@@ -6,7 +6,6 @@ A convenience C++ drop in header library that enables logging to the Visual Stud
 ---
 
 ```
-#define _OUTPUT_DEBUG_ENABLED
 #include "OutputDebug.h"
 
 int main() 
@@ -15,18 +14,13 @@ int main()
 }
 ```
 
-###### Output Debug is disabled by default
+###### The Visual Studio flag `_DEBUG` controls whether OutputDebug is enabled
 
-The keys below should be defined before including the `OutputDebug.h`, only once, either at the entry point, precompiled header or in Visual Studio via `Project Properties > C/C++ > Preprocessor > Preprocessor Definitions`
+This flag is present by default in Visual Studio C/C++ projects in Debug configuration and not present in Release, so nothing has to be configured.
 
+Just in case, it is set at `Project Properties` > `Configuration Properties` > `C/C++` > `Preprocessor` > `Preprocessor Definitions`.
 
-###### Enable Output Debug printing
-
-```
-#define _OUTPUT_DEBUG_ENABLED
-```
-
-When disabled all functions can be kept in place and are switched to noop
+When disabled all functions can be kept in place and are switched to noop.
 
 ###### Customize the output debug string and format length
 
