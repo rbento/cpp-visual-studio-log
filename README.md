@@ -32,7 +32,7 @@ When disabled all functions can be kept in place and are switched to noop.
 ### Disable the external Command Prompt Console Window in Visual Studio 
 ---
  
-For a C++ project on Visual Studio, one can avoid launching the separate Command prompt and keeping all log in the Visual Studio Output window by settings the following Project Properties:
+For a C++ project on Visual Studio, one can avoid launching the separate Command prompt and keeping all log in the Visual Studio Output window with the following Project Properties:
 
 ##### Linker > System > SubSystem
  
