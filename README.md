@@ -20,7 +20,7 @@ This flag is present by default in Visual Studio C/C++ projects in Debug configu
 
 Just in case, it is set at `Project Properties` > `Configuration Properties` > `C/C++` > `Preprocessor` > `Preprocessor Definitions`.
 
-When disabled all functions can be kept in place and are switched to noop.
+When disabled, calls are replaced with a noop version of the logging function.
 
 ###### Customize the output debug string and format length
 
