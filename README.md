@@ -1,6 +1,8 @@
 # OutputDebug.h
 
-A convenience C++ drop in header library that enables logging to the Visual Studio Output window
+Convenience debug logging macros for C++ projects.
+
+Based on the [OutputDebugStringA](https://learn.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-outputdebugstringa) that sends a string to the debugger for display, which then shows up in the Visual Studio Output window.
 
 ### Usage
 ---
